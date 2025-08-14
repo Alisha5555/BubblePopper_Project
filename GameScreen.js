@@ -35,6 +35,7 @@
  * - Test on different device sizes for responsive UI
  */
 
+import { Pressable } from 'react-native';
 import React, { useState, useEffect, useRef } from 'react';
 import { StyleSheet, View, Text, Dimensions, TouchableWithoutFeedback } from 'react-native';
 import Bubble from './components/Bubble';
@@ -76,8 +77,9 @@ export default function GameScreen() {
   
   // Fixed gun position - currently in the middle (MODIFY THIS)
   const gunWidth = 60;
-  const gunPosition = screenWidth / 2 - gunWidth / 2;
+  //const gunPosition = screenWidth / 2 - gunWidth / 2;
   const gunCenterX = screenWidth / 2;
+  const [gunPosition, setGunPosition] = useState(screenWidth / 2 - gunWidth / 2);
   
   /**
    * ============== STUDENT TASK 2 ==============
@@ -105,12 +107,13 @@ export default function GameScreen() {
   /**
    * Handle tap to shoot laser
    * Currently fires the laser on any tap when game is active
-   */
+   *
   const handleTap = () => {
     if (!gameStarted || gameOver) return;
     fireLaser();
   };
-  
+  */
+ 
   /**
    * Fire a laser from the gun center
    * Creates visible laser and checks for bubble hits
@@ -141,12 +144,12 @@ export default function GameScreen() {
      */
     
     // Check for hits immediately
-    checkHits(gunCenterX);
+    checkHits(gunPosition + gunWidth/2);
     
     // Make laser disappear after 300ms
     laserTimeoutRef.current = setTimeout(() => {
       setLaserVisible(false);
-    }, 300);
+    }, 100);
   };
   
   /**
@@ -303,8 +306,20 @@ export default function GameScreen() {
   return (
     <View style={styles.container}>
       {/* Game area */}
-      <TouchableWithoutFeedback onPress={handleTap} disabled={!gameStarted || gameOver}>
-        <View style={styles.gameArea}>
+      <Pressable
+        style={styles.gameArea}
+        onTouchMove={(event)=>{
+          if (!gameStarted || gameOver) return;
+        
+          const tapX = event.nativeEvent.pageX;
+
+          const ScreenX = Math.max(0,Math.min(tapX-gunWidth/2,screenWidth-gunWidth));
+        
+          setGunPosition(ScreenX);
+        }}
+
+         onPress={()=>fireLaser()}
+      >
           {/* Bubbles */}
           {bubbles.map(bubble => (
             <Bubble
@@ -330,7 +345,7 @@ export default function GameScreen() {
             <View
               style={[
                 styles.laser,
-                { left: gunCenterX - 2 } // Center the 4px wide laser from gun center
+                { left: gunPosition + gunWidth/2 - 2 } // Center the 4px wide laser from gun center
               ]}
             />
           )}
@@ -350,8 +365,7 @@ export default function GameScreen() {
             <View style={styles.gunBase} />
             <View style={styles.gunBarrel} />
           </View>
-        </View>
-      </TouchableWithoutFeedback>
+      </Pressable>
 
       {/* Score and Timer */}
       <View style={styles.hudContainer}>
@@ -406,6 +420,7 @@ const styles = StyleSheet.create({
     flex: 1,
     width: '100%',
     height: '100%',
+    position: 'relative',
   },
   hudContainer: {
     flexDirection: 'row',
