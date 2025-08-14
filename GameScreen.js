@@ -414,7 +414,7 @@ export default function GameScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#000033',
+    backgroundColor: '#37015bff',
   },
   gameArea: {
     flex: 1,
@@ -448,7 +448,7 @@ const styles = StyleSheet.create({
     zIndex: 100,
   },
   title: {
-    color: 'white',
+    color: '#4CAF50',
     fontSize: 32,
     fontWeight: 'bold',
     marginBottom: 20,
@@ -472,7 +472,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     zIndex: 50,
-    backgroundColor: '#555',
+    backgroundColor: '#ff5100ff',
+    borderBlockColor: 'black',
+    borderWidth: 2,
     borderRadius: 5,
   },
   gunBase: {
@@ -480,16 +482,20 @@ const styles = StyleSheet.create({
     bottom: 0,
     width: 40,
     height: 20,
-    backgroundColor: '#333',
+    backgroundColor: '#425400ff',
     borderTopLeftRadius: 5,
     borderTopRightRadius: 5,
+    borderBlockColor: 'black',
+    borderWidth: 2,
   },
   gunBarrel: {
     position: 'absolute',
     bottom: 20,
     width: 10,
     height: 30,
-    backgroundColor: '#222',
+    backgroundColor: '#417e00ff',
+    borderBlockColor: 'black',
+    borderWidth: 2,
   },
   laser: {
     position: 'absolute',
